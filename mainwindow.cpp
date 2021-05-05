@@ -19,8 +19,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initializeMatrixModificationButtons()
 {
-    QTableWidget *matrixWidgets[2] = {ui->aMatrixTable, ui->bMatrixTable};
-    const QPushButton *matrixButtons[2][4] = {
+    static QTableWidget *matrixWidgets[2] {ui->aMatrixTable, ui->bMatrixTable};
+    const QPushButton *matrixButtons[2][4] {
         {
             ui->aMatAddRowButton, ui->aMatAddColumnButton,
             ui->aMatRemoveRowButton, ui->aMatRemoveColumnButton
@@ -30,25 +30,25 @@ void MainWindow::initializeMatrixModificationButtons()
             ui->bMatRemoveRowButton, ui->bMatRemoveColumnButton
         }
     };
-    const int deltas[4][2] = {
+    const int deltas[4][2] {
         {  0,  1 }, {  1, 0  },
         {  0, -1 }, { -1, 0  }
     };
     for (int i = 0; i < 2; ++i) {
         for (int j = 0; j < 4; ++j) {
-            connect(matrixButtons[i][j], &QPushButton::clicked, this, [=] { changeMatrixSize(matrixWidgets[i], deltas[j][0], deltas[j][1]); });
+            connect(matrixButtons[i][j], &QPushButton::clicked, this, [=] { changeMatrixSize(*matrixWidgets[i], deltas[j][0], deltas[j][1]); });
         }
     }
 }
 
-void MainWindow::changeMatrixSize(QTableWidget *matrix, int dw, int dh)
+void MainWindow::changeMatrixSize(QTableWidget &matrix, int dw, int dh)
 {
-    int columns = matrix->columnCount(), rows = matrix->rowCount();
+    int columns = matrix.columnCount(), rows = matrix.rowCount();
     columns += dw;
     rows += dh;
 
-    matrix->setColumnCount(columns);
-    matrix->setRowCount(rows);
+    matrix.setColumnCount(columns);
+    matrix.setRowCount(rows);
 }
 
 QTableWidget *operator>>(QTableWidget *display, Matrix &input) {
@@ -113,25 +113,10 @@ void MainWindow::on_plusButton_clicked()
 
 void MainWindow::on_minusButton_clicked()
 {
-    performMath([=] (Matrix &a, Matrix &b) { return a - b - b; });
+    performMath([=] (Matrix &a, Matrix &b) { return a - b; });
 }
 
 void MainWindow::on_multiplyButton_clicked()
 {
     performMath([=] (Matrix &a, Matrix &b) { return a * b; });
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    Matrix a;
-    ui->aMatrixTable >> a;
-
-    double max;
-    int i, j;
-    std::tie(max, i, j) = a.findMax();
-
-    QMessageBox box(this);
-    box.setWindowTitle("Max element");
-    box.setText(tr("Max element is %1 at A[%2][%3]").arg(max).arg(i).arg(j));
-    box.exec();
 }

@@ -27,63 +27,12 @@ double Matrix::getHeight() const
     return m_height;
 }
 
-std::tuple<double, int, int> Matrix::findMax() const
-{
-    double max = __DBL_MIN__;
-    int maxI, maxJ;
-    for (unsigned int i = 0; i < m_height; ++i) {
-        for (unsigned int j = 0; j < m_width; ++j) {
-            if (m_data[i][j] > max) {
-                max = m_data[i][j];
-                maxI = i;
-                maxJ = j;
-            }
-        }
-    }
-    return std::make_tuple(max, maxI, maxJ);
-}
-
-double Matrix::findMaxInColumn(int column) const
-{
-    double max = __DBL_MIN__;
-    for (unsigned int row = 0; row < m_height; ++row) {
-        if (m_data[row][column] > max) {
-            max = m_data[row][column];
-        }
-    }
-    return max;
-}
-
-double Matrix::findMin() const
-{
-    double min = __DBL_MAX__;
-    for (unsigned int i = 0; i < m_height; ++i) {
-        for (unsigned int j = 0; j < m_width; ++j) {
-            if (m_data[i][j] < min) {
-                min = m_data[i][j];
-            }
-        }
-    }
-    return min;
-}
-
-double Matrix::findMinInRow(int row) const
-{
-    double min = __DBL_MIN__;
-    for (unsigned int column = 0; column < m_height; ++column) {
-        if (m_data[row][column] > min) {
-            min = m_data[row][column];
-        }
-    }
-    return min;
-}
-
-void Matrix::resize(int newSize)
+void Matrix::resize(uint newSize) throw(std::bad_alloc)
 {
     resize(newSize, newSize);
 }
 
-void Matrix::resize(int newWidth, int newHeight)
+void Matrix::resize(uint newWidth, uint newHeight) throw(std::bad_alloc)
 {
     deallocData();
 
@@ -93,10 +42,10 @@ void Matrix::resize(int newWidth, int newHeight)
     allocData();
 }
 
-Matrix Matrix::operator+(const Matrix &other) const
+Matrix Matrix::operator+(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument)
 {
     if (m_width != other.m_width || m_height != other.m_height)
-        throw std::invalid_argument("Can't add matricies with different sizes!");
+        throw std::invalid_argument("Can't add matrices with different sizes!");
 
     Matrix result(m_height, m_width);
     for (unsigned int i = 0; i < m_height; ++i) {
@@ -107,10 +56,10 @@ Matrix Matrix::operator+(const Matrix &other) const
     return result;
 }
 
-Matrix Matrix::operator-(const Matrix &other) const
+Matrix Matrix::operator-(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument)
 {
     if (m_width != other.m_width || m_height != other.m_height)
-        throw std::invalid_argument("Can't substract matricies with different sizes!");
+        throw std::invalid_argument("Can't substract matrices with different sizes!");
     Matrix result(m_height, m_width);
     for (unsigned int i = 0; i < m_height; ++i) {
         for (unsigned int j = 0; j < m_width; ++j) {
@@ -120,7 +69,7 @@ Matrix Matrix::operator-(const Matrix &other) const
     return result;
 }
 
-Matrix Matrix::operator*(const double scalar) const
+Matrix Matrix::operator*(const double scalar) const throw(std::bad_alloc)
 {
     Matrix result(m_height, m_width);
     for (unsigned int i = 0; i < m_height; ++i) {
@@ -131,10 +80,10 @@ Matrix Matrix::operator*(const double scalar) const
     return result;
 }
 
-Matrix Matrix::operator*(const Matrix &other) const
+Matrix Matrix::operator*(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument)
 {
     if (m_width != other.m_height)
-        throw std::invalid_argument("Matricies have incompatible sizes!");
+        throw std::invalid_argument("Matrices have incompatible sizes!");
 
     Matrix result(m_height, other.m_width);
     for (unsigned int i = 0; i < m_height; ++i) {
@@ -147,17 +96,17 @@ Matrix Matrix::operator*(const Matrix &other) const
     return result;
 }
 
-double *Matrix::operator[](unsigned int rowIndex)
+double *Matrix::operator[](unsigned int rowIndex) throw(std::range_error)
 {
     return m_data[rowIndex];
 }
 
-const double *Matrix::operator[](unsigned int rowIndex) const
+const double *Matrix::operator[](unsigned int rowIndex) const throw(std::range_error)
 {
     return m_data[rowIndex];
 }
 
-void Matrix::allocData()
+void Matrix::allocData() throw(std::bad_alloc)
 {
     m_data = new double*[m_height];
     for (unsigned int i = 0; i < m_height; ++i) {

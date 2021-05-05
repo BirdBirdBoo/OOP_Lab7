@@ -2,42 +2,40 @@
 #define MATRIX_H
 
 #include <stdexcept>
-#include <tuple>
+#include <new>
+
+#define throw(...)
 
 class Matrix
 {
+    typedef unsigned int uint;
+
 public:
     Matrix();
-    Matrix(const unsigned int size);
-    Matrix(const unsigned int height, const unsigned int width);
+    Matrix(const uint size);
+    Matrix(const uint height, const uint width);
     ~Matrix();
 
     double getWidth() const;
     double getHeight() const;
 
-    std::tuple<double, int, int> findMax() const;
-    double findMaxInColumn(int columnIndex) const;
+    void resize(uint newSize) throw(std::bad_alloc);
+    void resize(uint newWidth, uint newHeight) throw(std::bad_alloc);
 
-    double findMin() const;
-    double findMinInRow(int rowIndex) const;
+    Matrix operator+(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument);
+    Matrix operator-(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument);
+    Matrix operator*(const Matrix &other) const throw(std::bad_alloc, std::invalid_argument);
+    Matrix operator*(const double other) const throw(std::bad_alloc);
 
-    void resize(int newSize);
-    void resize(int newWidth, int newHeight);
-
-    Matrix operator+(const Matrix &other) const;
-    Matrix operator-(const Matrix &other) const;
-    Matrix operator*(const Matrix &other) const;
-    Matrix operator*(const double other) const;
-
-    double *operator[](unsigned int rowIndex);
-    const double *operator[](unsigned int rowIndex) const;
+    double *operator[](unsigned int rowIndex) throw(std::range_error);
+    const double *operator[](unsigned int rowIndex) const throw(std::range_error);
 
 private:
     double **m_data = nullptr;
     unsigned int m_width;
     unsigned int m_height;
 
-    void allocData();
+    void allocData() throw(std::bad_alloc);
     void deallocData();
 };
 

@@ -25,13 +25,11 @@ private slots:
 
     void on_multiplyButton_clicked();
 
-    void on_pushButton_clicked();
-
 private:
     Ui::MainWindow *ui;
 
     void initializeMatrixModificationButtons();
-    void changeMatrixSize(QTableWidget *matric, int dw, int dh);
+    void changeMatrixSize(QTableWidget &matrix, int dw, int dh);
 
     void performMath(std::function<Matrix(Matrix&, Matrix&)> operation);
 
