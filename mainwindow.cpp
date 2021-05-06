@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     initializeMatrixModificationButtons();
+    changeMatrixSize(*ui->aMatrixTable, 2, 2);
+    changeMatrixSize(*ui->bMatrixTable, 2, 2);
 }
 
 MainWindow::~MainWindow()
@@ -49,6 +51,18 @@ void MainWindow::changeMatrixSize(QTableWidget &matrix, int dw, int dh)
 
     matrix.setColumnCount(columns);
     matrix.setRowCount(rows);
+
+    for (int i = rows - dh; i < rows; ++i) {
+        for (int j = 0; j < columns; ++j) {
+            ensureItem(&matrix, i, j)->setText("0");
+        }
+    }
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = columns - dw; j < columns; ++j) {
+            ensureItem(&matrix, i, j)->setText("0");
+        }
+    }
 }
 
 QTableWidget *operator>>(QTableWidget *display, Matrix &input) {
@@ -57,7 +71,12 @@ QTableWidget *operator>>(QTableWidget *display, Matrix &input) {
 
     for (unsigned int i = 0; i < height; ++i) {
         for (unsigned int j = 0; j < width; ++j) {
-            input[i][j] = ensureItem(display, i, j)->text().toDouble();
+            bool parseSuccessful;
+            input[i][j] = ensureItem(display, i, j)->text().toDouble(&parseSuccessful);
+
+            if (!parseSuccessful) {
+                throw std::invalid_argument("Unable to parse input");
+            }
         }
     }
 

@@ -35,10 +35,10 @@
       <item row="0" column="0" colspan="2">
        <widget class="QTableWidget" name="aMatrixTable">
         <property name="rowCount">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="columnCount">
-         <number>2</number>
+         <number>0</number>
         </property>
         <attribute name="horizontalHeaderVisible">
          <bool>false</bool>
@@ -46,10 +46,6 @@
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
-        <row/>
-        <row/>
-        <column/>
-        <column/>
        </widget>
       </item>
       <item row="2" column="0">
@@ -219,10 +215,10 @@
       <item row="0" column="3" colspan="2">
        <widget class="QTableWidget" name="bMatrixTable">
         <property name="rowCount">
-         <number>2</number>
+         <number>0</number>
         </property>
         <property name="columnCount">
-         <number>2</number>
+         <number>0</number>
         </property>
         <attribute name="horizontalHeaderVisible">
          <bool>false</bool>
@@ -230,10 +226,6 @@
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
-        <row/>
-        <row/>
-        <column/>
-        <column/>
        </widget>
       </item>
       <item row="2" column="3">

@@ -5,6 +5,8 @@
 #include <QTableWidget>
 #include <matrix.h>
 
+#include <stdexcept>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
